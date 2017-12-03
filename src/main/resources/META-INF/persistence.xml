@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+    <persistence-unit name="persistence-unit">
+    	<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    	<class>br.com.marteleto.framework.persistence.vo.abstracts.APersistenceEntity</class>
+        <class>br.com.marteleto.locadora.vo.ClienteVO</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+        	<property name="hibernate.connection.driver_class" value="org.apache.derby.jdbc.EmbeddedDriver" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyTenSevenDialect" />
+			<property name="hibernate.max_fetch_depth" value="0" />
+			<property name="hibernate.default_batch_fetch_size" value="1" />
+			
+			<property name="hibernate.current_session_context_class" value="org.hibernate.context.internal.ThreadLocalSessionContext" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.use_sql_comments" value="false" />
+			
+			<property name="hibernate.connection.url" value="jdbc:derby:memory:locadora;create=true" />
+			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
+			<property name="hibernate.hbm2ddl.import_files" value="database.sql" />
+        </properties>
+    </persistence-unit>
+</persistence>
+

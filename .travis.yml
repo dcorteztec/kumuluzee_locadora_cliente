@@ -1,0 +1,6 @@
+language: java
+deploy:
+  provider: heroku
+  api_key:
+    secure: "bece5235-be66-4621-a63b-86052995fd09"
+  app: kumuluzee-locadora-cliente
