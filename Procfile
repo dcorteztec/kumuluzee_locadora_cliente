@@ -1,0 +1,1 @@
+web: java -Dserver.port=8081 -jar target/kumuluzee_locadora_cliente.jar

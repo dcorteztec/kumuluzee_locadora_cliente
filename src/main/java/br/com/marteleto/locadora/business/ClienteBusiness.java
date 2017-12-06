@@ -16,7 +16,6 @@ public class ClienteBusiness extends ABusiness<ClienteVO> implements IClienteBus
 	private static final long serialVersionUID = 1L;
 	@Inject private IClienteDao dao;
 	
-	@Override
 	protected IClienteDao getDao() {
 		return dao;
 	}

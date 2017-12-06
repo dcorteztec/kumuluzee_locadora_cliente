@@ -1,1 +1,0 @@
-web: java -jar target/kumuluzee-locadora-cliente.jar

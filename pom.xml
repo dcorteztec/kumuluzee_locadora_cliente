@@ -9,43 +9,56 @@
 
     <name>kumuluzee locadora cliente</name>
     <description>kumuluzee locadora cliente</description>
-    <url>http://www.marteleto.com.br</url>
+    <url>https://github.com/amarteleto/framework_core</url>
     
-    <organization>
-		<name>Marteleto Desenvolvimento</name>
-		<url>http://www.marteleto.com.br</url>
-	</organization>
-  	
+    <issueManagement>
+		<url>https://github.com/amarteleto/framework_core/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+	
+	<scm>
+		<url>https://github.com/amarteleto/framework_core</url>
+		<connection>scm:git:git://github.com/amarteleto/framework_core.git</connection>
+		<developerConnection>scm:git:git@github.com:amarteleto/framework_core.git</developerConnection>
+	</scm>
+ 	
   	<developers>
 		<developer>
-			<id>amarteleto@outlook.com</id>
+			<id>amarteleto</id>
 			<email>amarteleto@outlook.com</email>
 			<name>Anderson A. Marteleto</name>
+			<url>https://github.com/amarteleto</url>
 		</developer>
 	</developers>
 
     <properties>
+    	<maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
     	<build.number>${project.version}.${maven.build.timestamp}</build.number>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kumuluz.version>2.4.1</kumuluz.version>
-        <maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
+  		<github.global.server>github</github.global.server>
     </properties>
-    
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.kumuluz.ee</groupId>
-                <artifactId>kumuluzee-bom</artifactId>
-                <version>${kumuluz.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
         
     <dependencies>
+    	<!-- FRAMEWORK -->
+		<dependency>
+			<groupId>br.com.marteleto.framework</groupId>
+			<artifactId>framework_persistence_hibernate</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+  					<artifactId>hibernate-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>br.com.marteleto.framework</groupId>
+			<artifactId>framework_service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
     	<!-- APACHE BEANUTILS -->
 		<dependency>
 			<groupId>commons-beanutils</groupId>
@@ -95,8 +108,19 @@
 
     <build>
         <finalName>${project.artifactId}</finalName>
+        <resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
         <plugins>
-          <plugin>
+        	<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-resources-plugin</artifactId>
+		        <version>3.0.2</version>
+			</plugin>
+          	<plugin>
                 <groupId>com.kumuluz.ee</groupId>
                 <artifactId>kumuluzee-maven-plugin</artifactId>
                 <version>2.4.1</version>
@@ -111,5 +135,123 @@
             </plugin>
         </plugins>
     </build>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.kumuluz.ee</groupId>
+                <artifactId>kumuluzee-bom</artifactId>
+                <version>${kumuluz.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+    <distributionManagement>
+  		<repository>
+    		<id>bintray</id>
+    		<url>https://api.bintray.com/maven/amarteleto/maven-repo/github/;publish=1</url>
+  		</repository>
+	</distributionManagement>
+	
+	<repositories>
+  		<repository>
+    		<id>bintray</id>
+    		<url>http://dl.bintray.com/amarteleto/maven-repo</url>
+    		<releases>
+      			<enabled>true</enabled>
+    		</releases>
+    		<snapshots>
+      			<enabled>false</enabled>
+    		</snapshots>
+  		</repository>
+	</repositories>
+	
+	<profiles>
+  		<profile>
+    		<id>release</id>
+    		<build>
+      			<plugins>
+      				<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>3.0.1</version>
+						<executions>
+		                    <execution>
+		                        <id>attach-sources</id>
+		                        <goals>
+		                            <goal>jar</goal>
+		                        </goals>
+		                    </execution>
+		                </executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.10.4</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+      			</plugins>
+    		</build>
+  		</profile>
+  		<profile>
+    		<id>site</id>
+    		<build>
+      			<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-site-plugin</artifactId>
+						<version>3.6</version>
+						<configuration>
+							<reportPlugins>
+								<plugin>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-project-info-reports-plugin</artifactId>
+									<version>2.9</version>
+									<configuration>
+										<dependencyDetailsEnabled>true</dependencyDetailsEnabled>
+										<dependencyLocationsEnabled>true</dependencyLocationsEnabled>
+									</configuration>
+								</plugin>
+								<plugin>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-javadoc-plugin</artifactId>
+									<version>2.10.4</version>
+								</plugin>
+								<plugin>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-surefire-report-plugin</artifactId>
+									<version>2.20.1</version>
+								</plugin>
+								<plugin>
+									<groupId>org.apache.maven.plugins</groupId>
+									<artifactId>maven-checkstyle-plugin</artifactId>
+									<version>2.17</version>
+								</plugin>
+								<plugin>
+									<groupId>org.codehaus.mojo</groupId>
+									<artifactId>cobertura-maven-plugin</artifactId>
+									<version>2.7</version>
+									<configuration>
+										<formats>
+											<format>html</format>
+											<format>xml</format>
+										</formats>
+									</configuration>
+								</plugin>
+							</reportPlugins>
+						</configuration>
+					</plugin>
+      			</plugins>
+    		</build>
+  		</profile>
+	</profiles>
 
 </project>

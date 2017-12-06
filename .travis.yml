@@ -1,4 +1,13 @@
 language: java
+
+addons:
+  sonarcloud:
+    organization: "amarteleto-github"
+    token:
+      secure: "1f9cc5e30a44454e8c31c53537d067d54db0f7d6"
+script:
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+
 deploy:
   provider: heroku
   api_key:
